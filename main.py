@@ -1,19 +1,21 @@
 from src.data_loader import load_mnist_data
-from src.model import Model
+from src.model import Model, one_hot
+import numpy as np
 
 def main():
-    (images, labels), (test_images, test_labels) = load_mnist_data()
-    
-    """
-    Network has three layers: input layer has 784 neurons, hidden layer has 128 and output layer has 10.
-    """
-    model = Model([784, 128, 10])
+    (train_images, train_labels), (test_images, test_labels) = load_mnist_data("mnist_data")
 
-    input_image = images[:, 0].reshape(-1, 1)
+    train_images = [image.reshape(784, 1) for image in train_images]
+    test_images = [image.reshape(784, 1) for image in test_images]
     
-    output = model._forward(input_image)
-    
-    print(output)
+    train_labels = [one_hot(10, np.array([label])).reshape(10, 1) for label in train_labels]
+    test_labels = [one_hot(10, np.array([label])).reshape(10, 1) for label in test_labels]
+
+    training_data = list(zip(train_images, train_labels))
+    test_data = list(zip(test_images, test_labels))
+
+    model = Model(784, 128, 10)
+    model.train_model(training_data, 30, 10, 3.0, test_data)
 
 if __name__ == "__main__":
     main()

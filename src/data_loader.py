@@ -1,32 +1,38 @@
 import gzip
 import numpy as np
-import os
+import struct
 
 def read_images(file_path):
-    with gzip.open(file_path) as f:
-        if int.from_bytes(f.read(4), byteorder='big') != 2051:
+    """ Reads the MNIST image file and returns a numpy array of images. """
+
+    with gzip.open(file_path, "rb") as f:
+        magic_number, num_images, rows, cols = struct.unpack(">IIII", f.read(16))
+        if magic_number != 2051:
             raise ValueError("Invalid magic number for image file")
 
-        images_amount = int.from_bytes(f.read(4), byteorder='big')
-        rows = int.from_bytes(f.read(4), byteorder='big')
-        cols = int.from_bytes(f.read(4), byteorder='big')
+        images = np.frombuffer(f.read(), dtype=np.uint8).reshape(num_images, rows * cols)
 
-        buffer = f.read(images_amount * rows * cols)
-        images = np.frombuffer(buffer, dtype=np.uint8).astype(np.float32) / 255
-        return images.reshape(images_amount, rows * cols).T
+        return images.astype(np.float32) / 255
 
 def read_labels(file_path):
-    with gzip.open(file_path) as f:
-        if int.from_bytes(f.read(4), byteorder='big') != 2049:
-            raise ValueError("Invalid magic number for label file")
+    """ Reads the MNIST label file and returns a numpy array of labels. """
 
-        labels_amount = int.from_bytes(f.read(4), byteorder='big')
-        return np.frombuffer(f.read(labels_amount), dtype=np.uint8)
+    with gzip.open(file_path, "rb") as f:
+        magic_number, num_labels = struct.unpack(">II", f.read(8))
+        if magic_number != 2049:
+            raise ValueError("Invalid magic number for image file")
 
-def load_mnist_data():
-    images = read_images("mnist_data/train-images-idx3-ubyte.gz")
-    labels = read_labels("mnist_data/train-labels-idx1-ubyte.gz")
-    test_images = read_images("mnist_data/t10k-images-idx3-ubyte.gz")
-    test_labels = read_labels("mnist_data/t10k-labels-idx1-ubyte.gz")
+        return np.frombuffer(f.read(), dtype=np.uint8)
 
-    return (images, labels), (test_images, test_labels)
+def load_mnist_data(data_dir):
+    """ Loads the MNIST data.
+
+    Returns:
+        tuple: ((train_images, train_labels), (test_images, test_labels))
+    """
+    train_images = read_images(f"{data_dir}/train-images-idx3-ubyte.gz")
+    train_labels = read_labels(f"{data_dir}/train-labels-idx1-ubyte.gz")
+    test_images = read_images(f"{data_dir}/t10k-images-idx3-ubyte.gz")
+    test_labels = read_labels(f"{data_dir}/t10k-labels-idx1-ubyte.gz")
+
+    return (train_images, train_labels), (test_images, test_labels)
