@@ -1,6 +1,6 @@
 import gzip
-import numpy as np
 import struct
+import numpy as np
 
 def read_images(file_path):
     """ Reads the MNIST image file and returns a numpy array of images. """
@@ -18,7 +18,7 @@ def read_labels(file_path):
     """ Reads the MNIST label file and returns a numpy array of labels. """
 
     with gzip.open(file_path, "rb") as f:
-        magic_number, num_labels = struct.unpack(">II", f.read(8))
+        magic_number, _ = struct.unpack(">II", f.read(8))
         if magic_number != 2049:
             raise ValueError("Invalid magic number for image file")
 

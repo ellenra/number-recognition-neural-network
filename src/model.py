@@ -1,19 +1,24 @@
 import numpy as np
+from pathlib import Path
 
-class Model(object):
+class Model():
     def __init__(self, input_layer_size, hidden_layer_size, output_layer_size):
         """ Initializes model with random weights and zero biases. """
 
         self.layers = 3
+        self.accuracy = 0
 
-        self.w1 = np.random.randn(hidden_layer_size, input_layer_size) * np.sqrt(2 / input_layer_size)
-        self.w2 = np.random.randn(output_layer_size, hidden_layer_size) * np.sqrt(2 / hidden_layer_size)
+        self.w1 = (np.random.randn(hidden_layer_size, input_layer_size)
+                   * np.sqrt(2 / input_layer_size))
+        self.w2 = (np.random.randn(output_layer_size, hidden_layer_size)
+                   * np.sqrt(2 / hidden_layer_size))
 
         self.b1 = np.zeros((hidden_layer_size, 1))
         self.b2 = np.zeros((output_layer_size, 1))
 
     def forward(self, vector):
-        """ Forward pass to calculates activations for layers. Sigmoid function for hidden layer and softmax for output layer.
+        """ Forward pass to calculate activations for layers. Sigmoid function
+        for hidden layer and softmax for output layer.
 
         Args:
             vector: Numpy array, shape (784, 1)
@@ -30,7 +35,7 @@ class Model(object):
 
         return [vector, a1, a2], [z1, z2]
 
-    def train_model(self, training_data, epochs, batch_size, learning_rate, test_data):
+    def train_model(self, training_data, epochs, batch_size, learning_rate, test_data, save_model):
         """ Divides data to smaller batches, trains model and shows results.
 
         Args:
@@ -40,12 +45,12 @@ class Model(object):
             learning_rate: Learning rate for the model
             test_data: List of tuples (vector, label)
         """
-        
+
         for epoch in range(epochs):
             np.random.shuffle(training_data)
-            
+
             batches = []
-            
+
             for i in range(0, len(training_data), batch_size):
                 batches.append(training_data[i : i + batch_size])
 
@@ -55,15 +60,18 @@ class Model(object):
 
                 for vector, label in batch:
                     gradients_for_biases, gradients_for_weights = self.backpropagate(vector, label)
-                    for i in range(len(nabla_b)):
-                        nabla_b[i] += gradients_for_biases[i]
-                    for i in range(len(nabla_w)):
-                        nabla_w[i] += gradients_for_weights[i]
+                    for x, y in enumerate(gradients_for_biases):
+                        nabla_b[x] += y
+                    for x, y in enumerate(gradients_for_weights):
+                        nabla_w[x] += y
                 self.update_params(nabla_b, nabla_w, learning_rate, batch)
 
-            accuracy = self.evaluate(test_data)
-            print(f"{epoch}: {accuracy} / {len(test_data)}")
+            self.accuracy = self.evaluate(test_data)
+            print(f"{epoch}: {self.accuracy}% accuracy")
             
+        if save_model:
+            self.save_trained_model()
+
     def update_params(self, nabla_b, nabla_w, learning_rate, batch):
         self.w1 -= (learning_rate / len(batch)) * nabla_w[0]
         self.w2 -= (learning_rate / len(batch)) * nabla_w[1]
@@ -93,16 +101,25 @@ class Model(object):
         hidden_layer_weight_gradients = np.dot(hidden_error, activations[0].T)
         hidden_layer_weight_biases = np.sum(hidden_error, axis=1, keepdims=True)
 
-        return ([hidden_layer_weight_biases, output_layer_weight_biases], [hidden_layer_weight_gradients, output_layer_weight_gradients])
+        return ([hidden_layer_weight_biases, output_layer_weight_biases],
+                [hidden_layer_weight_gradients, output_layer_weight_gradients])
 
     def evaluate(self, test_data):
         """ Evaluates performance.
 
         Returns:
-            Number of correct results
+            Accuracy of model as a percentage
         """
         results = [(np.argmax(self.forward(x)[0][-1]), np.argmax(y)) for (x, y) in test_data]
-        return sum(int(x == y) for (x, y) in results)
+        accuracy = sum(int(x == y) for (x, y) in results) / len(test_data)
+        accuracy_percentage = round(accuracy * 100, 1)
+        return accuracy_percentage
+
+    def save_trained_model(self):
+        pass
+
+    def load_saved_model(self, path):
+        pass
 
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
@@ -115,7 +132,3 @@ def softmax(z):
     exp_z = np.exp(z - np.max(z))
     return exp_z / np.sum(exp_z, axis=0)
 
-def one_hot(num_labels, labels):
-    one_hot_matrix = np.zeros((labels.size, num_labels))
-    one_hot_matrix[np.arange(labels.size), labels] = 1
-    return one_hot_matrix.T
