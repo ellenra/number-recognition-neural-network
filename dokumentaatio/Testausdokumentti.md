@@ -6,4 +6,6 @@ Testeissä on käytetty unittest-kirjastoa. Testit tehdään kymmenellä satunna
 - Mallin koulutus ei kaadu virheisiin
 - Painot ja biasit muuttuvat koulutuskierroksen jälkeen
 
-## Testikattavuusraportti
+#### Testikattavuusraportti
+![Screenshot from 2025-04-05 20-39-35](https://github.com/user-attachments/assets/9b20863d-6baf-408b-9e70-d60d42dd13e2)
+
