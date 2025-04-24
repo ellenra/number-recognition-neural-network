@@ -112,14 +112,31 @@ class Model():
         """
         results = [(np.argmax(self.forward(x)[0][-1]), np.argmax(y)) for (x, y) in test_data]
         accuracy = sum(int(x == y) for (x, y) in results) / len(test_data)
-        accuracy_percentage = round(accuracy * 100, 1)
+        accuracy_percentage = round(accuracy * 100, 4)
         return accuracy_percentage
 
     def save_trained_model(self):
-        pass
+        directory = Path("files")
+        directory.mkdir(parents=True, exist_ok=True)
+        
+        path = directory / f"accuracy{round(self.accuracy, 4)}.npz"
+        
+        np.savez(path, w1=self.w1, w2=self.w2, b1=self.b1, b2=self.b2)
 
-    def load_saved_model(self, path):
-        pass
+    def load_latest_model(self, folder="files"):
+        dir = Path(folder)
+        files = list(dir.glob("*.npz"))
+        if not files:
+            return
+
+        newest_file = max(files, key=lambda f: f.stat().st_mtime)
+        data = np.load(newest_file)
+
+        self.w1 = data["w1"]
+        self.w2 = data["w2"]
+        self.b1 = data["b1"]
+        self.b2 = data["b2"]        
+
 
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))

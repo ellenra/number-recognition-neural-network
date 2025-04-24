@@ -4,7 +4,7 @@ Tämä projekti on Helsingin yliopiston tietojenkäsittelytieteen aineopintojen 
 
 ## Aihe
 
-Toteutan ohjelman, joka pystyy tunnistamaan käsinkirjoitettuja numeroita neuroverkon avulla. Käyttöliittymän kautta voidaan ladata kuvatiedostoja, joissa on käsinkirjoitettuja numeroita. Neuroverkko analysoi kuvat ja ohjelma näyttää tunnistetut numerot käyttäjälle.
+Toteutan ohjelman, joka pystyy tunnistamaan käsinkirjoitettuja numeroita neuroverkon avulla. Käyttöliittymän kautta voidaan piirtää numeroita. Koulutettu neuroverkko analysoi kuvat ja ohjelma näyttää tunnistetut numerot käyttäjälle.
 
 ## Algoritmit ja tietorakenteet
 

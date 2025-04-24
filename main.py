@@ -1,5 +1,5 @@
 from src.data_loader import load_mnist_data
-from src.model import Model, one_hot
+from src.model import Model
 import numpy as np
 
 def main():
@@ -15,7 +15,8 @@ def main():
     test_data = list(zip(test_images, test_labels))
 
     model = Model(784, 128, 10)
-    model.train_model(training_data, 30, 10, 3.0, test_data, save_model=False)
+    model.load_latest_model()
+    model.train_model(training_data, 20, 10, 3.0, test_data, save_model=True)
 
 if __name__ == "__main__":
     main()
