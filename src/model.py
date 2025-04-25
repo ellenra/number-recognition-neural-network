@@ -68,11 +68,19 @@ class Model():
 
             self.accuracy = self.evaluate(test_data)
             print(f"{epoch}: {self.accuracy}% accuracy")
-            
+
         if save_model:
             self.save_trained_model()
 
     def update_params(self, nabla_b, nabla_w, learning_rate, batch):
+        """ Updates weights and biases using gradient descents calculated in backpropagation.
+
+        Args:
+            nabla_b: List of gradients for biases [gradient for b1, gradient for b2]
+            nabla_w: List of gradients for weights [gradient for w1, gradient for w2]
+            learning_rate: Used to control the size of updates
+            batch: Current smaller batch of training data
+        """
         self.w1 -= (learning_rate / len(batch)) * nabla_w[0]
         self.w2 -= (learning_rate / len(batch)) * nabla_w[1]
         self.b1 -= (learning_rate / len(batch)) * nabla_b[0]
@@ -116,16 +124,21 @@ class Model():
         return accuracy_percentage
 
     def save_trained_model(self):
+        """ Saves weights and biases of trained model in a .npz file.
+        """
         directory = Path("files")
         directory.mkdir(parents=True, exist_ok=True)
-        
-        path = directory / f"accuracy{round(self.accuracy, 4)}.npz"
-        
-        np.savez(path, w1=self.w1, w2=self.w2, b1=self.b1, b2=self.b2)
 
-    def load_latest_model(self, folder="files"):
-        dir = Path(folder)
+        path = directory / f"accuracy{round(self.accuracy, 4)}.npz"
+
+        np.savez(path, w1=self.w1, w2=self.w2, b1=self.b1, b2=self.b2, accuracy=self.accuracy)
+
+    def load_latest_model(self):
+        """ Loads the most recently saved pre-trained model's weights and biases into the model model if available.
+        """
+        dir = Path("files")
         files = list(dir.glob("*.npz"))
+
         if not files:
             return
 
@@ -135,7 +148,8 @@ class Model():
         self.w1 = data["w1"]
         self.w2 = data["w2"]
         self.b1 = data["b1"]
-        self.b2 = data["b2"]        
+        self.b2 = data["b2"] 
+        self.accuracy = data["accuracy"] 
 
 
 def sigmoid(z):
