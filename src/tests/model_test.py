@@ -31,7 +31,7 @@ class TestModel(unittest.TestCase):
 
     def test_training(self):
         try:
-            self.model.train_model(self.test_data, 1, 10, 3.0, self.test_data)
+            self.model.train_model(self.test_data, 1, 10, 3.0, self.test_data, save_model=False)
         except:
             print("Error in training!")
 
@@ -41,11 +41,16 @@ class TestModel(unittest.TestCase):
         b1 = self.model.b1.copy()
         b2 = self.model.b2.copy()
 
-        self.model.train_model(self.test_data, 1, 10, 3.0, self.test_data)
+        self.model.train_model(self.test_data, 1, 10, 3.0, self.test_data, save_model=False)
 
         self.assertFalse(np.array_equal(w1, self.model.w1))
         self.assertFalse(np.array_equal(w2, self.model.w2))
         self.assertFalse(np.array_equal(b1, self.model.b1))
         self.assertFalse(np.array_equal(b2, self.model.b2))
-
-    #testaa et accuracy paranee
+        
+    def test_accuracy_increases(self):
+        before = self.model.evaluate(self.test_data)
+        self.model.train_model(self.test_data, 5, 10, 3.0, self.test_data, save_model=False)
+        after = self.model.evaluate(self.test_data)
+        
+        self.assertGreaterEqual(after, before)
