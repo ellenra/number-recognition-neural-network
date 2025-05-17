@@ -5,14 +5,10 @@ import customtkinter
 from model import Model
 
 class UI:
-    """ A class that creates the user interface.
+    """ Creates the user interface.
     """
     def __init__(self, root, model):
         """ Initializes the UI.
-
-        Args:
-        - root: The root Tkinter window
-        - model: The neural network model used to make predictions
         """
         self.root = root
         self.model = model

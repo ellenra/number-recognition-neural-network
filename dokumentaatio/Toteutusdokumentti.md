@@ -2,7 +2,11 @@
 
 ## Ohjelman yleisrakenne
 
-Ohjelma perustuu neuroverkkoon, joka oppii tunnistamaan käsinkirjoitettuja lukuja. Koulutus tapahtuu MNIST-datasetillä, joka sisältää 60 000 esimerkkiä neuroverkon kouluttamiseen ja 10 000 esimerkkiä testaukseen.
+Ohjelma perustuu neuroverkkoon, joka oppii tunnistamaan käsinkirjoitettuja lukuja. Koulutus tapahtuu MNIST-datasetillä, joka sisältää 60 000 esimerkkiä neuroverkon kouluttamiseen ja 10 000 esimerkkiä testaukseen. Mallia voi jatkokouluttaa sekä manuaalisesti testata käyttöliittymällä.
+
+Käytän neuroverkkoa, jossa on kolme kerrosta. 784 neuronia sisältävä sisääntulokerros, 128 neuronia sisältävä piilokerros ja 10 neuronia sisältävä ulostulokerros.
+
+Mallin oppiminen perustuu gradienttimenetelmää virhefunktion minimoimiseen painojen ja biasien säätelyllä. backpropagation -algoritmiin
 
 ## Puutteet ja parannusehdotukset
 

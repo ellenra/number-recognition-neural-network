@@ -1,7 +1,3 @@
 ## Viikko 1
 
-Tällä viikolla pohdin projektini aihetta ja päätin aiheeksi käsin kirjoitettujen numeroiden tunnistuksen, koska minua kiinnostaa päästä toteuttamaan neuroverkko itse. Kirjoitan tällä hetkellä kandia neuroverkkojen optimoinnista, joten neuroverkot ovat melko tuttuja. Olen tällä viikolla lukenut artikkeleita ja katsonut videoita tähän aiheeseen liittyen sekä pohtinut projektini toteutustapaa. Tein GitHub repositorion, aloitin dokumentaation ja alustin projektin poetryllä.
-
-Seuraavaksi aloitan projektin käytännön toteutuksen.
-
-Aikaa käytetty noin 4h.
+Jatkan viime periodissa aloitettua projektiani. Ohjelmani toimii jo määrittelydokumentin mukaan, olen tehnyt koulutettavan neuroverkon ja käyttöliittymän, jonka kautta se tunnistaa piirrettyjä numeroita. Testejä en ole kuitenkaan tehnyt tarpeeksi ja dokumentaatiossa vielä parannettavaa. Haluan myös muutenkin syventyä aiheeseen ja parantaa projektiani vielä paremmin.

@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from src.model import Model
-from src.data_loader import load_mnist_data
+from src.mnist_data_handler import load_mnist_data
 
 def mock_mnist_data():
     (_, _), (test_images, test_labels) = load_mnist_data("mnist_data")
